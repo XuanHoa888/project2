@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Khoản - XH STORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-wrap { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; display: flex; gap: 1.5rem; align-items: flex-start; }
+
+        /* Sidebar nav */
+        .profile-nav { width: 220px; flex-shrink: 0; }
+        .profile-nav-card { background: #fff; border-radius: 8px; box-shadow: var(--shadow-sm); overflow: hidden; }
+        .profile-avatar-wrap { background: linear-gradient(135deg,var(--primary-color),var(--secondary-color)); padding: 1.5rem; text-align: center; }
+        .profile-avatar { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 700; color: #fff; margin: 0 auto .6rem; }
+        .profile-name { color: #fff; font-weight: 600; font-size: 1rem; }
+        .profile-role { color: rgba(255,255,255,.8); font-size: .75rem; margin-top: .2rem; }
+        .nav-items { padding: .5rem 0; }
+        .nav-item { display: flex; align-items: center; gap: .75rem; padding: .8rem 1.2rem; font-size: .9rem; color: #555; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-left: 3px solid transparent; }
+        .nav-item:hover { background: #f8fafc; color: var(--primary-color); transform: translateX(6px); }
+        .nav-item.active { background: #eff6ff; color: var(--primary-color); border-left-color: var(--primary-color); font-weight: 600; transform: translateX(6px); }
+        .nav-item i { width: 18px; text-align: center; }
+
+        .nav-group-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #94a3b8;
+            padding: 0.9rem 1.2rem 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .nav-group-title i {
+            font-size: 0.8rem;
+        }
+
+        /* Main content */
+        .profile-main { flex: 1; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* Cards */
+        .p-card { background: #fff; border-radius: 8px; box-shadow: var(--shadow-sm); padding: 1.5rem; margin-bottom: 1.2rem; }
+        .p-card h2 { font-size: 1.05rem; color: var(--primary-color); display: flex; align-items: center; gap: .5rem; margin-bottom: 1.2rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border-color); }
+
+        /* Form */
+        .fg { margin-bottom: 1rem; }
+        .fg label { display: block; font-size: .85rem; color: #555; font-weight: 500; margin-bottom: .35rem; }
+        .fg input, .fg textarea { width: 100%; padding: .7rem .9rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; font-size: .95rem; outline: none; transition: border-color .2s; }
+        .fg input:focus, .fg textarea:focus { border-color: var(--primary-color); }
+        .fg textarea { resize: vertical; min-height: 80px; }
+        .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .btn-save { background: var(--primary-color); color: #fff; border: none; padding: .75rem 2rem; border-radius: 4px; font-size: .95rem; font-weight: 600; cursor: pointer; transition: background .2s; }
+        .btn-save:hover { background: var(--primary-hover); }
+        .btn-save:disabled { opacity: .6; cursor: not-allowed; }
+
+        /* Orders tab */
+        .order-card { border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 1rem; overflow: hidden; }
+        .order-head { background: #fafafa; padding: .75rem 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .order-code { font-weight: 700; color: var(--primary-color); font-size: .95rem; }
+        .order-date { font-size: .8rem; color: #888; }
+        .status-badge { display: inline-block; padding: .2rem .75rem; border-radius: 20px; font-size: .75rem; font-weight: 700; }
+        .s-PENDING           { background: #fff3e0; color: #e65100; }
+        .s-PROCESSING        { background: #e3f2fd; color: #1565c0; }
+        .s-SHIPPING          { background: #e8eaf6; color: #283593; }
+        .s-DELIVERED         { background: #e8f5e9; color: #2e7d32; }
+        .s-CANCELLED         { background: #fce4ec; color: #c62828; }
+        .s-REFUND_REQUESTED  { background: #fff9c4; color: #f57f17; }
+        .s-REFUNDED          { background: #e0f2f1; color: #00695c; }
+        .s-REFUND_REJECTED   { background: #fce4ec; color: #b71c1c; }
+        .order-items-list { padding: .75rem 1rem; border-bottom: 1px solid #f5f5f5; }
+        .order-item-row { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; font-size: .875rem; }
+        .order-item-img { width: 44px; height: 44px; object-fit: cover; border-radius: 4px; border: 1px solid #eee; }
+        .order-foot { display: flex; justify-content: space-between; align-items: center; padding: .75rem 1rem; }
+        .order-total { font-weight: 700; color: var(--primary-color); }
+        .btn-refund { background: #fff; color: #c62828; border: 1px solid #c62828; padding: .35rem 1rem; border-radius: 4px; font-size: .85rem; cursor: pointer; transition: all .2s; }
+        .btn-refund:hover { background: #c62828; color: #fff; }
+
+        /* Wishlist */
+        .wish-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+        .wish-card { background: #fff; border-radius: 8px; border: 1px solid var(--border-color); overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .wish-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); border-color: var(--primary-color); }
+        .wish-img-wrap { width: 100%; height: 160px; overflow: hidden; }
+        .wish-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .wish-card:hover .wish-img { transform: scale(1.08); }
+        .wish-info { padding: .75rem; }
+        .wish-name { font-size: .875rem; font-weight: 500; color: #333; margin-bottom: .25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .wish-price { color: var(--primary-color); font-weight: 700; font-size: .9rem; margin-bottom: .5rem; }
+        .wish-actions { display: flex; gap: .4rem; }
+        .btn-add-cart { flex: 1; background: var(--primary-color); color: #fff; border: none; padding: .4rem; border-radius: 3px; font-size: .8rem; cursor: pointer; }
+        .btn-remove-wish { background: #fee2e2; color: #b91c1c; border: none; padding: .4rem .6rem; border-radius: 3px; cursor: pointer; font-size: .8rem; }
+
+        /* Addresses */
+        .addr-list { display: flex; flex-direction: column; gap: .75rem; }
+        .addr-card { border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; display: flex; justify-content: space-between; align-items: flex-start; }
+        .addr-card.default { border-color: var(--primary-color); background: #f0f9ff; }
+        .addr-info h4 { font-size: .9rem; font-weight: 600; margin-bottom: .25rem; }
+        .addr-info p { font-size: .85rem; color: #666; }
+        .addr-default-tag { font-size: .72rem; background: var(--primary-color); color: #fff; padding: 1px 8px; border-radius: 20px; margin-left: .5rem; }
+        .addr-actions { display: flex; gap: .4rem; flex-shrink: 0; margin-left: 1rem; }
+        .btn-addr { padding: .35rem .75rem; border-radius: 3px; font-size: .8rem; cursor: pointer; border: none; }
+        .btn-addr-def { background: #eff6ff; color: var(--primary-color); }
+        .btn-addr-del { background: #fee2e2; color: #b91c1c; }
+        .add-addr-form { margin-top: 1rem; }
+        .add-addr-form.hidden { display: none; }
+        .btn-outline { background: #fff; color: var(--primary-color); border: 1px solid var(--primary-color); padding: .6rem 1.2rem; border-radius: 4px; font-size: .9rem; cursor: pointer; display: flex; align-items: center; gap: .4rem; }
+
+        /* Custom orders tab */
+        .co-status { display: inline-block; padding: .2rem .7rem; border-radius: 20px; font-size: .75rem; font-weight: 700; }
+        .co-SUBMITTED { background: #e0f2fe; color: #0369a1; }
+        .co-APPROVED  { background: #dcfce7; color: #16a34a; }
+        .co-WAITING_CONFIRM_PAYMENT { background: #fef9c3; color: #854d0e; }
+        .co-PAID      { background: #dbeafe; color: #1e40af; }
+        .co-PROCESSING{ background: #ede9fe; color: #6d28d9; }
+        .co-SHIPPED   { background: #e0f2fe; color: #0c4a6e; }
+        .co-COMPLETED { background: #d1fae5; color: #065f46; }
+        .co-REJECTED  { background: #fee2e2; color: #991b1b; }
+
+        /* Toast */
+        #toast-prof { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; }
+        .tp-toast { padding: .7rem 1.2rem; border-radius: 6px; color: #fff; font-size: .9rem; margin-top: .4rem; box-shadow: var(--shadow-md); animation: slideIn .3s; }
+        .tp-toast.success { background: #16a34a; }
+        .tp-toast.error   { background: #dc2626; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; } }
+
+        /* Refund modal */
+        .modal-ov { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: none; align-items: center; justify-content: center; z-index: 3000; }
+        .modal-ov.open { display: flex; }
+        .modal-bx { background: #fff; border-radius: 8px; padding: 1.5rem; max-width: 420px; width: 90%; }
+        .modal-bx h3 { margin-bottom: 1rem; color: var(--primary-color); }
+        .modal-acts { display: flex; gap: .5rem; justify-content: flex-end; margin-top: 1rem; }
+        .btn-cancel { padding: .5rem 1rem; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer; }
+        .btn-confirm { padding: .5rem 1.2rem; background: var(--primary-color); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+
+        .empty-s { text-align: center; padding: 3rem 1rem; color: #aaa; }
+        .empty-s i { font-size: 3rem; display: block; margin-bottom: .75rem; }
+        @media (max-width: 768px) {
+            .page-wrap { flex-direction: column; }
+            .profile-nav { width: 100%; }
+            .form-2col { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo"><i class="fa-solid fa-bag-shopping"></i> XH STORE</a>
+            <div class="search-bar" style="max-width:400px;">
+                <input type="text" id="search-input" placeholder="Tìm kiếm sản phẩm..." onkeydown="if(event.key==='Enter') pageSearch()">
+                <button class="search-btn" onclick="pageSearch()"><i class="fa-solid fa-search"></i></button>
+            </div>
+            <div class="header-actions">
+                <div class="header-action-item" onclick="toggleWishlist()" style="position:relative;">
+                    <i class="fa-regular fa-heart"></i>
+                    <span>Yêu thích</span>
+                    <span class="wishlist-badge" id="wishlist-badge-main" style="display:none;">0</span>
+                </div>
+                <a href="cart.html" class="header-action-item" style="text-decoration:none;color:#fff;">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Giỏ hàng</span>
+                    <span class="cart-badge" id="cart-badge-main">0</span>
+                </a>
+                <div class="header-action-item admin-only-btn" id="header-admin-btn" onclick="window.location.href='admin/index.html'" style="display:none; color: var(--primary-color, #ee4d2d);">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>Quản trị</span>
+                </div>
+                <div class="header-action-item user-menu" id="user-menu-trigger">
+                    <i class="fa-regular fa-circle-user" style="font-size:1.4rem;"></i>
+                    <span>Tài khoản</span>
+                    <div class="user-dropdown" id="user-dropdown"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-wrap">
+
+        <!-- Sidebar nav -->
+        <div class="profile-nav">
+            <div class="profile-nav-card">
+                <div class="profile-avatar-wrap">
+                    <div class="profile-avatar" id="avatar-initials">?</div>
+                    <div class="profile-name" id="prof-username">—</div>
+                    <div class="profile-role" id="prof-role">—</div>
+                </div>
+                <div class="nav-items">
+                    <div class="nav-group-title"><i class="fa-solid fa-circle-user"></i> Tài khoản</div>
+                    <div class="nav-item active" onclick="switchTab('profile',this)">
+                        <i class="fa-solid fa-user"></i> Hồ Sơ Cá Nhân
+                    </div>
+                    <div class="nav-item" onclick="switchTab('password',this)">
+                        <i class="fa-solid fa-lock"></i> Đổi Mật Khẩu
+                    </div>
+                    <div class="nav-item" onclick="switchTab('addresses',this)">
+                        <i class="fa-solid fa-location-dot"></i> Địa Chỉ Giao Hàng
+                    </div>
+
+                    <div class="nav-group-title"><i class="fa-solid fa-heart"></i> Mua sắm & Yêu thích</div>
+                    <div class="nav-item" onclick="switchTab('wishlist',this)">
+                        <i class="fa-solid fa-heart"></i> Danh Sách Yêu Thích
+                    </div>
+                    <div class="nav-item" onclick="switchTab('recent',this)">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Đã Xem Gần Đây
+                    </div>
+
+                    <div class="nav-group-title"><i class="fa-solid fa-box-open"></i> Đơn hàng của tôi</div>
+                    <div class="nav-item" onclick="switchTab('orders',this)">
+                        <i class="fa-solid fa-box"></i> Đơn Mua Của Tôi
+                    </div>
+                    <div class="nav-item" onclick="switchTab('custom',this)">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Đặt Hàng Theo Yêu Cầu
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="profile-main">
+
+            <!-- TAB: HỒ SƠ -->
+            <div class="tab-panel active" id="panel-profile">
+                <div class="p-card">
+                    <h2><i class="fa-solid fa-user"></i> Thông Tin Cá Nhân</h2>
+                    <div class="form-2col">
+                        <div class="fg">
+                            <label>Tên đăng nhập</label>
+                            <input type="text" id="prof-uname" readonly style="background:#f8fafc;color:#888;">
+                        </div>
+                        <div class="fg">
+                            <label>Email</label>
+                            <input type="email" id="prof-email" placeholder="example@email.com">
+                        </div>
+                        <div class="fg">
+                            <label>Số điện thoại</label>
+                            <input type="tel" id="prof-phone" placeholder="0901234567">
+                        </div>
+                        <div class="fg" style="grid-column:span 2">
+                            <label>Địa chỉ</label>
+                            <textarea id="prof-address" rows="2" placeholder="Địa chỉ của bạn"></textarea>
+                        </div>
+                    </div>
+                    <button class="btn-save" id="save-profile-btn" onclick="saveProfile()">
+                        <i class="fa-solid fa-floppy-disk"></i> Lưu Thay Đổi
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB: ĐỔI MẬT KHẨU -->
+            <div class="tab-panel" id="panel-password">
+                <div class="p-card">
+                    <h2><i class="fa-solid fa-lock"></i> Đổi Mật Khẩu</h2>
+                    <div class="fg">
+                        <label>Mật khẩu hiện tại <span style="color:red">*</span></label>
+                        <input type="password" id="pwd-old" placeholder="••••••••">
+                    </div>
+                    <div class="fg">
+                        <label>Mật khẩu mới <span style="color:red">*</span></label>
+                        <input type="password" id="pwd-new" placeholder="Ít nhất 6 ký tự">
+                    </div>
+                    <div class="fg">
+                        <label>Xác nhận mật khẩu mới <span style="color:red">*</span></label>
+                        <input type="password" id="pwd-confirm" placeholder="Nhập lại mật khẩu mới">
+                    </div>
+                    <button class="btn-save" id="save-pwd-btn" onclick="savePassword()">
+                        <i class="fa-solid fa-key"></i> Đổi Mật Khẩu
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB: ĐƠN HÀNG -->
+            <div class="tab-panel" id="panel-orders">
+                <div class="p-card">
+                    <h2><i class="fa-solid fa-box"></i> Đơn Hàng Của Tôi</h2>
+                    <div id="orders-list"><div class="empty-s"><i class="fa-solid fa-spinner fa-spin"></i>Đang tải...</div></div>
+                </div>
+            </div>
+
+            <!-- TAB: ĐẶT HÀNG MẪU -->
+            <div class="tab-panel" id="panel-custom">
+                <div class="p-card">
+                    <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Đặt Hàng Theo Yêu Cầu</h2>
+                    <p style="margin-bottom:1rem;color:#666;font-size:.9rem;">Gửi yêu cầu sản phẩm đặc biệt cho shop.</p>
+                    <a href="custom-order.html" class="btn-save" style="display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;margin-bottom:1.2rem;">
+                        <i class="fa-solid fa-plus"></i> Gửi Yêu Cầu Mới
+                    </a>
+                    <div id="custom-orders-list"><div class="empty-s"><i class="fa-solid fa-spinner fa-spin"></i>Đang tải...</div></div>
+                </div>
+            </div>
+
+            <!-- TAB: WISHLIST -->
+            <div class="tab-panel" id="panel-wishlist">
+                <div class="p-card">
+                    <h2><i class="fa-solid fa-heart"></i> Sản Phẩm Yêu Thích</h2>
+                    <div id="wish-list"></div>
+                </div>
+            </div>
+
+            <!-- TAB: ĐÃ XEM GẦN ĐÂY -->
+            <div class="tab-panel" id="panel-recent">
+                <div class="p-card">
+                    <h2><i class="fa-solid fa-clock-rotate-left"></i> Đã Xem Gần Đây</h2>
+                    <div id="recent-list"></div>
+                </div>
+            </div>
+
+            <!-- TAB: ĐỊA CHỈ -->
+            <div class="tab-panel" id="panel-addresses">
+                <div class="p-card">
+                    <h2><i class="fa-solid fa-location-dot"></i> Địa Chỉ Giao Hàng</h2>
+                    <div class="addr-list" id="addr-list"></div>
+                    <button class="btn-outline" style="margin-top:1rem;" onclick="toggleAddAddr()">
+                        <i class="fa-solid fa-plus"></i> Thêm địa chỉ mới
+                    </button>
+                    <div class="add-addr-form hidden" id="add-addr-form">
+                        <div style="height:.75rem;"></div>
+                        <div class="form-2col">
+                            <div class="fg">
+                                <label>Tên người nhận <span style="color:red">*</span></label>
+                                <input type="text" id="new-addr-name" placeholder="Nguyễn Văn A">
+                            </div>
+                            <div class="fg">
+                                <label>Số điện thoại <span style="color:red">*</span></label>
+                                <input type="tel" id="new-addr-phone" placeholder="0901234567">
+                            </div>
+                        </div>
+                        <div class="fg">
+                            <label>Địa chỉ <span style="color:red">*</span></label>
+                            <textarea id="new-addr-text" rows="2" placeholder="Số nhà, đường, phường, quận, tỉnh/thành phố"></textarea>
+                        </div>
+                        <button class="btn-save" onclick="addAddress()">
+                            <i class="fa-solid fa-plus"></i> Lưu Địa Chỉ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Refund modal -->
+    <div class="modal-ov" id="refund-modal">
+        <div class="modal-bx">
+            <h3><i class="fa-solid fa-rotate-left"></i> Yêu Cầu Hoàn Hàng</h3>
+            <input type="hidden" id="refund-order-id">
+            <div class="fg">
+                <label>Lý do <span style="color:red">*</span></label>
+                <select id="refund-reason" style="width:100%;padding:.7rem .9rem;border:1px solid var(--border-color);border-radius:4px;font-family:inherit;">
+                    <option value="">-- Chọn lý do --</option>
+                    <option value="Sản phẩm bị lỗi">Sản phẩm bị lỗi</option>
+                    <option value="Sản phẩm không đúng mô tả">Không đúng mô tả</option>
+                    <option value="Sản phẩm không đúng kích thước">Sai kích thước</option>
+                    <option value="Không nhận được hàng">Không nhận được hàng</option>
+                    <option value="Khác">Khác</option>
+                </select>
+            </div>
+            <div class="fg">
+                <label>Mô tả thêm</label>
+                <textarea id="refund-desc" rows="3" placeholder="Mô tả chi tiết vấn đề..."></textarea>
+            </div>
+            <div class="modal-acts">
+                <button class="btn-cancel" onclick="closeRefund()">Hủy</button>
+                <button class="btn-confirm" onclick="submitRefund()">Gửi Yêu Cầu</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-prof"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        const STATUS_LABEL = {
+            PENDING:'⏳ Chờ xác nhận', PROCESSING:'🔄 Đang xử lý',
+            SHIPPING:'🚚 Đang giao hàng', DELIVERED:'✅ Đã giao hàng',
+            CANCELLED:'❌ Đã hủy', REFUND_REQUESTED:'🔁 Chờ hoàn',
+            REFUNDED:'💚 Đã hoàn tiền', REFUND_REJECTED:'🚫 Từ chối hoàn'
+        };
+        const CO_STATUS = {
+            SUBMITTED:'📋 Chờ xử lý', APPROVED:'💰 Đã báo giá',
+            WAITING_CONFIRM_PAYMENT:'⏳ Chờ thanh toán', PAID:'💳 Đã thanh toán',
+            PROCESSING:'🔧 Đang thực hiện', SHIPPED:'🚚 Đang giao',
+            COMPLETED:'🎉 Hoàn thành', REJECTED:'❌ Đã từ chối'
+        };
+
+        function toast(msg, type='success') {
+            const wrap = document.getElementById('toast-prof');
+            const el = document.createElement('div');
+            el.className = 'tp-toast ' + type;
+            el.textContent = msg;
+            wrap.appendChild(el);
+            setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity .3s'; }, 2500);
+            setTimeout(() => el.remove(), 2800);
+        }
+
+        function fmtVnd(n) { return '₫' + Number(n).toLocaleString('vi-VN'); }
+        function fmtDate(d) {
+            if (!d) return '—';
+            const dt = new Date(d);
+            return dt.toLocaleDateString('vi-VN') + ' ' + dt.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});
+        }
+
+        //  TABS 
+        function switchTab(tab, el) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('panel-' + tab).classList.add('active');
+            el.classList.add('active');
+            if (tab === 'orders') loadOrders();
+            if (tab === 'custom') loadCustomOrders();
+            if (tab === 'wishlist') loadWishlist();
+            if (tab === 'recent') loadRecentItems();
+            if (tab === 'addresses') loadAddresses();
+        }
+
+        //  PROFILE 
+        let currentUser = null;
+        async function loadProfile() {
+            try {
+                const res = await fetch('/api/auth/profile');
+                if (res.status === 401) {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'login.html?redirect=profile.html';
+                    return;
+                }
+                const u = await res.json();
+                currentUser = u;
+                const initials = (u.username || 'U')[0].toUpperCase();
+                document.getElementById('avatar-initials').textContent = initials;
+                document.getElementById('prof-username').textContent = u.username;
+                document.getElementById('prof-role').textContent = u.role === 'ADMIN' ? '🛡 Quản trị viên' : '👤 Khách hàng';
+                document.getElementById('prof-uname').value = u.username || '';
+                document.getElementById('prof-email').value = u.email || '';
+                document.getElementById('prof-phone').value = u.phone || '';
+                document.getElementById('prof-address').value = u.address || '';
+            } catch (e) {
+                toast('Lỗi tải thông tin: ' + e.message, 'error');
+            }
+        }
+
+        async function saveProfile() {
+            const btn = document.getElementById('save-profile-btn');
+            btn.disabled = true; btn.textContent = 'Đang lưu...';
+            const email = document.getElementById('prof-email').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email && !emailRegex.test(email)) {
+                toast('Email không đúng định dạng', 'error');
+                return;
+            }
+            try {
+                const res = await fetch('/api/auth/profile', {
+                    method: 'PUT',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({
+                        email: email,
+                        phone: document.getElementById('prof-phone').value.trim(),
+                        address: document.getElementById('prof-address').value.trim()
+                    })
+                });
+                const d = await res.json();
+                if (!res.ok) throw new Error(d.error || 'Lỗi lưu');
+                // Update localStorage
+                const stored = JSON.parse(localStorage.getItem('currentUser') || '{}');
+                localStorage.setItem('currentUser', JSON.stringify({...stored, ...d}));
+                toast('Đã lưu thông tin thành công!');
+            } catch (e) {
+                toast(e.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Lưu Thay Đổi';
+            }
+        }
+
+        //  PASSWORD 
+        async function savePassword() {
+            const oldPwd = document.getElementById('pwd-old').value;
+            const newPwd = document.getElementById('pwd-new').value;
+            const conf   = document.getElementById('pwd-confirm').value;
+            if (!oldPwd) { toast('Vui lòng nhập mật khẩu hiện tại', 'error'); return; }
+            if (!newPwd || newPwd.length < 6) { toast('Mật khẩu mới phải ít nhất 6 ký tự', 'error'); return; }
+            if (newPwd !== conf) { toast('Xác nhận mật khẩu không khớp', 'error'); return; }
+
+            const btn = document.getElementById('save-pwd-btn');
+            btn.disabled = true; btn.textContent = 'Đang xử lý...';
+            try {
+                const res = await fetch('/api/auth/password', {
+                    method: 'PUT',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({ oldPassword: oldPwd, newPassword: newPwd })
+                });
+                const d = await res.json();
+                if (!res.ok) throw new Error(d.error || 'Đổi mật khẩu thất bại');
+                toast('Đổi mật khẩu thành công!');
+                document.getElementById('pwd-old').value = '';
+                document.getElementById('pwd-new').value = '';
+                document.getElementById('pwd-confirm').value = '';
+            } catch (e) {
+                toast(e.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-key"></i> Đổi Mật Khẩu';
+            }
+        }
+
+        // ORDERS 
+        async function loadOrders() {
+            const container = document.getElementById('orders-list');
+            container.innerHTML = '<div class="empty-s"><i class="fa-solid fa-spinner fa-spin"></i>Đang tải...</div>';
+            try {
+                const res = await fetch('/api/orders/my');
+                if (res.status === 401) { container.innerHTML = '<div class="empty-s"><i class="fa-solid fa-lock"></i>Vui lòng đăng nhập</div>'; return; }
+                const orders = await res.json();
+                if (!orders || orders.length === 0) {
+                    container.innerHTML = '<div class="empty-s"><i class="fa-solid fa-box-open"></i>Bạn chưa có đơn hàng nào<br><a href="index.html" style="color:var(--primary-color);margin-top:.5rem;display:inline-block;">Mua sắm ngay →</a></div>';
+                    return;
+                }
+                container.innerHTML = orders.map(renderOrderCard).join('');
+            } catch (e) {
+                container.innerHTML = '<div class="empty-s"><i class="fa-solid fa-circle-exclamation"></i>Lỗi tải đơn hàng</div>';
+            }
+        }
+
+        function renderOrderCard(o) {
+            const lbl = STATUS_LABEL[o.status] || o.status;
+            const items = (o.items || []).map(it => `
+                <div class="order-item-row">
+                    <img src="${it.imageUrl||'images/placeholder.png'}" class="order-item-img" onerror="this.src='images/placeholder.png'">
+                    <div style="flex:1;">
+                        <div style="font-weight:500;">${it.productName}</div>
+                        <div style="color:#888;font-size:.8rem;">${it.variant||''} x${it.quantity}</div>
+                    </div>
+                    <div style="color:var(--primary-color);font-weight:600;">${fmtVnd(it.productPrice * it.quantity)}</div>
+                </div>`).join('');
+            const refundBtn = o.status === 'DELIVERED'
+                ? `<button class="btn-refund" onclick="openRefund(${o.id})"><i class="fa-solid fa-rotate-left"></i> Hoàn hàng</button>` : '';
+            return `<div class="order-card">
+                <div class="order-head">
+                    <div><div class="order-code">${o.orderCode}</div><div class="order-date">${fmtDate(o.createdAt)}</div></div>
+                    <span class="status-badge s-${o.status}">${lbl}</span>
+                </div>
+                <div class="order-items-list">${items}</div>
+                <div class="order-foot">
+                    <div>Tổng: <span class="order-total">${fmtVnd(o.finalAmount)}</span></div>
+                    ${refundBtn}
+                </div>
+            </div>`;
+        }
+
+        //  CUSTOM ORDERS 
+        async function loadCustomOrders() {
+            const container = document.getElementById('custom-orders-list');
+            container.innerHTML = '<div class="empty-s"><i class="fa-solid fa-spinner fa-spin"></i>Đang tải...</div>';
+            try {
+                const res = await fetch('/api/custom-orders/my');
+                if (!res.ok) {
+                    // Handle auth error
+                    return;
+                }
+                const orders = await res.json();
+                if (!orders || orders.length === 0) {
+                    container.innerHTML = '<div class="empty-s"><i class="fa-solid fa-inbox"></i>Chưa có yêu cầu nào</div>'; return;
+                }
+                container.innerHTML = orders.map(o => `
+                    <div style="border:1px solid var(--border-color);border-radius:6px;padding:1rem;margin-bottom:.75rem;display:flex;justify-content:space-between;align-items:center;">
+                        <div>
+                            <div style="font-weight:600;">#${o.id} — ${o.productName}</div>
+                            <div style="font-size:.82rem;color:#888;margin-top:.2rem;">${fmtDate(o.createdAt)}</div>
+                            ${o.price ? '<div style="color:var(--primary-color);font-weight:700;margin-top:.25rem;">Giá: ' + fmtVnd(o.price) + '</div>' : ''}
+                        </div>
+                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.5rem;">
+                            <span class="co-status co-${o.status}">${CO_STATUS[o.status]||o.status}</span>
+                            ${o.status==='APPROVED' ? `<a href="custom-order.html?tab=history" style="font-size:.8rem;color:var(--primary-color);">Xác nhận thanh toán →</a>` : ''}
+                        </div>
+                    </div>`).join('');
+            } catch (e) {
+                container.innerHTML = '<div class="empty-s"><i class="fa-solid fa-circle-exclamation"></i>Lỗi tải dữ liệu</div>';
+            }
+        }
+
+        //  WISHLIST 
+        function loadWishlist() {
+            const wish = layWishlist();
+            const container = document.getElementById('wish-list');
+            if (!wish || !wish.length) {
+                container.innerHTML = '<div class="empty-s"><i class="fa-solid fa-heart-crack"></i>Chưa có sản phẩm yêu thích<br><a href="index.html" style="color:var(--primary-color);margin-top:.5rem;display:inline-block;">Khám phá ngay →</a></div>';
+                return;
+            }
+            Promise.all(wish.map(item => fetch('/api/products/' + (item.id || item)).then(r => r.ok ? r.json() : null)))
+                .then(results => {
+                    const prods = results.filter(r => r && r.product).map(r => r.product);
+                    if (!prods.length) { container.innerHTML = '<div class="empty-s"><i class="fa-solid fa-heart-crack"></i>Một số sản phẩm không còn tồn tại</div>'; return; }
+                    container.innerHTML = '<div class="wish-grid">' + prods.map(p => `
+                        <div class="wish-card">
+                            <div class="wish-img-wrap">
+                                <a href="product.html?id=${p.id}"><img src="${p.imageUrl||''}" class="wish-img" onerror="this.src='images/placeholder.png'"></a>
+                            </div>
+                            <div class="wish-info">
+                                <div class="wish-name"><a href="product.html?id=${p.id}" style="text-decoration:none;color:inherit;">${p.name}</a></div>
+                                <div class="wish-price">${fmtVnd(p.price)}</div>
+                                <div class="wish-actions">
+                                    <button class="btn-add-cart" onclick="addToCart(event,${p.id},'${p.name.replace(/'/g,"\\'")}',${p.price},'${p.imageUrl||''}','')">
+                                        <i class="fa-solid fa-cart-plus"></i> Thêm giỏ
+                                    </button>
+                                    <button class="btn-remove-wish" onclick="removeWish(${p.id})"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>`).join('') + '</div>';
+                });
+        }
+
+        function getRecentItems() {
+            const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            const key = user ? 'recent_' + user.username : 'recent_guest';
+            return JSON.parse(localStorage.getItem(key) || '[]');
+        }
+
+        function loadRecentItems() {
+            const container = document.getElementById('recent-list');
+            if (!container) return;
+            const items = getRecentItems();
+            if (!items.length) {
+                container.innerHTML = '<div class="empty-s"><i class="fa-solid fa-clock-rotate-left"></i>Chưa có lịch sử xem</div>';
+                return;
+            }
+            container.innerHTML = '<div class="wish-grid">' + items.map(p => `
+                <div class="wish-card">
+                    <div class="wish-img-wrap">
+                        <a href="product.html?id=${p.id}"><img src="${p.image||''}" class="wish-img" onerror="this.src='images/placeholder.png'"></a>
+                    </div>
+                    <div class="wish-info">
+                        <div class="wish-name"><a href="product.html?id=${p.id}" style="text-decoration:none;color:inherit;">${p.name}</a></div>
+                        <div class="wish-price">${fmtVnd(p.price)}</div>
+                    </div>
+                </div>`).join('') + '</div>';
+        }
+
+        function removeWish(productId) {
+            let wish = layWishlist();
+            wish = wish.filter(item => (item.id || item) !== productId);
+            luuWishlist(wish);
+            loadWishlist();
+            capNhatBadge();
+            toast('Đã xóa khỏi danh sách yêu thích');
+        }
+
+        //  ADDRESSES 
+        function getAddrKey() {
+            const u = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            return u ? 'addrs_' + u.username : 'addrs_guest';
+        }
+
+        function loadAddresses() {
+            const addrs = JSON.parse(localStorage.getItem(getAddrKey()) || '[]');
+            const list = document.getElementById('addr-list');
+            if (!addrs.length) {
+                list.innerHTML = '<div style="color:#aaa;font-size:.9rem;padding:.5rem 0;">Chưa có địa chỉ nào. Thêm địa chỉ đầu tiên.</div>';
+                return;
+            }
+            list.innerHTML = addrs.map((a, i) => `
+                <div class="addr-card ${i === 0 ? 'default' : ''}">
+                    <div class="addr-info">
+                        <h4>${a.name} — ${a.phone}${i===0?'<span class="addr-default-tag">Mặc định</span>':''}</h4>
+                        <p>${a.address}</p>
+                    </div>
+                    <div class="addr-actions">
+                        ${i > 0 ? `<button class="btn-addr btn-addr-def" onclick="setDefault(${i})">Đặt mặc định</button>` : ''}
+                        <button class="btn-addr btn-addr-del" onclick="deleteAddr(${i})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>`).join('');
+        }
+
+        function toggleAddAddr() {
+            const form = document.getElementById('add-addr-form');
+            form.classList.toggle('hidden');
+        }
+
+        function addAddress() {
+            const name = document.getElementById('new-addr-name').value.trim();
+            const phone = document.getElementById('new-addr-phone').value.trim();
+            const address = document.getElementById('new-addr-text').value.trim();
+            if (!name || !phone || !address) { toast('Vui lòng điền đầy đủ thông tin', 'error'); return; }
+            const addrs = JSON.parse(localStorage.getItem(getAddrKey()) || '[]');
+            addrs.push({ name, phone, address });
+            localStorage.setItem(getAddrKey(), JSON.stringify(addrs));
+            document.getElementById('new-addr-name').value = '';
+            document.getElementById('new-addr-phone').value = '';
+            document.getElementById('new-addr-text').value = '';
+            document.getElementById('add-addr-form').classList.add('hidden');
+            toast('Đã thêm địa chỉ mới');
+            loadAddresses();
+        }
+
+        function setDefault(i) {
+            const addrs = JSON.parse(localStorage.getItem(getAddrKey()) || '[]');
+            const [addr] = addrs.splice(i, 1);
+            addrs.unshift(addr);
+            localStorage.setItem(getAddrKey(), JSON.stringify(addrs));
+            loadAddresses();
+        }
+
+        function deleteAddr(i) {
+            if (!confirm('Xóa địa chỉ này?')) return;
+            const addrs = JSON.parse(localStorage.getItem(getAddrKey()) || '[]');
+            addrs.splice(i, 1);
+            localStorage.setItem(getAddrKey(), JSON.stringify(addrs));
+            toast('Đã xóa địa chỉ');
+            loadAddresses();
+        }
+
+        // REFUND 
+        function openRefund(orderId) {
+            document.getElementById('refund-order-id').value = orderId;
+            document.getElementById('refund-reason').value = '';
+            document.getElementById('refund-desc').value = '';
+            document.getElementById('refund-modal').classList.add('open');
+        }
+        function closeRefund() { document.getElementById('refund-modal').classList.remove('open'); }
+        async function submitRefund() {
+            const id = document.getElementById('refund-order-id').value;
+            const reason = document.getElementById('refund-reason').value;
+            const desc = document.getElementById('refund-desc').value;
+            if (!reason) { toast('Vui lòng chọn lý do hoàn hàng', 'error'); return; }
+            try {
+                const res = await fetch('/api/orders/' + id + '/refund', {
+                    method: 'POST', headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({ reason, description: desc })
+                });
+                const d = await res.json();
+                if (!res.ok) throw new Error(d.error || 'Gửi yêu cầu thất bại');
+                toast('Đã gửi yêu cầu hoàn hàng!');
+                closeRefund();
+                loadOrders();
+            } catch (e) { toast(e.message, 'error'); }
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get('tab');
+            if (tab) {
+                const navEl = document.querySelector(`.nav-item[onclick*="'${tab}'"]`);
+                if (navEl) switchTab(tab, navEl);
+            }
+        });
+    </script>
+</body>
+</html>

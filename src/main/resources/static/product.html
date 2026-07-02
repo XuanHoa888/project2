@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản phẩm - XH STORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .product-detail-container {
+            max-width:1200px; margin:2rem auto; background:var(--white);
+            border-radius:4px; box-shadow:var(--shadow-sm);
+            display:flex; padding:2rem; gap:2rem;
+        }
+        .product-gallery { flex:1; max-width:450px; }
+        .main-image { width:100%; border-radius:4px; border:1px solid var(--border-color); }
+        .product-info-detail { flex:2; }
+        .product-info-detail h1 { font-size:1.5rem; margin-bottom:1rem; font-weight:500; }
+        .price-section {
+            background:#fafafa; padding:1rem 1.5rem; margin-bottom:1.5rem;
+            color:var(--primary-color); font-size:2rem; font-weight:bold;
+        }
+        .variant-section { margin-bottom:1.5rem; }
+        .variant-title { color:var(--text-secondary); width:100px; display:inline-block; }
+        .variant-options { display:inline-flex; gap:.5rem; }
+        .variant-btn {
+            border:1px solid var(--border-color); background:var(--white);
+            padding:.5rem 1rem; border-radius:2px; cursor:pointer; transition:var(--transition);
+        }
+        .variant-btn:hover, .variant-btn.active {
+            border-color:var(--primary-color); color:var(--primary-color);
+        }
+        .quantity-section { display:flex; align-items:center; margin-bottom:2rem; }
+        .qty-input {
+            display:flex; align-items:center;
+            border:1px solid var(--border-color); border-radius:2px; margin-left:1rem;
+        }
+        .qty-btn { width:32px; height:32px; background:transparent; border:none; cursor:pointer; font-size:1rem; }
+        .qty-input input {
+            width:50px; height:32px; text-align:center; border:none;
+            border-left:1px solid var(--border-color); border-right:1px solid var(--border-color); outline:none;
+        }
+        .action-buttons { display:flex; gap:1rem; }
+        .btn-add-cart {
+            background:rgba(0,168,255,.1); color:var(--primary-color);
+            border:1px solid var(--primary-color); padding:1rem 2rem; border-radius:2px;
+            cursor:pointer; font-size:1rem; display:flex; align-items:center; gap:.5rem;
+        }
+        .btn-buy-now {
+            background:var(--primary-color); color:var(--white); border:none;
+            padding:1rem 3rem; border-radius:2px; cursor:pointer; font-size:1rem;
+        }
+        .btn-add-cart:hover { background:rgba(0,168,255,.2); }
+        .btn-buy-now:hover { background:var(--primary-hover); }
+
+        /* REVIEWS  */
+        .reviews-section { max-width:1200px; margin:1.5rem auto; background:#fff; border-radius:4px; box-shadow:var(--shadow-sm); padding:1.5rem 2rem; }
+        .reviews-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; border-bottom:1px solid var(--border-color); padding-bottom:1rem; }
+        .reviews-header h2 { font-size:1.1rem; color:var(--primary-color); display:flex; align-items:center; gap:.5rem; }
+        .avg-rating { display:flex; align-items:center; gap:.75rem; }
+        .avg-score { font-size:2.5rem; font-weight:800; color:var(--primary-color); line-height:1; }
+        .avg-stars { color:#f59e0b; font-size:1.2rem; }
+        .avg-count { font-size:.85rem; color:#888; }
+        .review-card { border-bottom:1px solid #f5f5f5; padding:1rem 0; }
+        .review-card:last-child { border-bottom:none; }
+        .review-top { display:flex; align-items:center; gap:.75rem; margin-bottom:.5rem; }
+        .review-avatar { width:36px; height:36px; border-radius:50%; background:var(--primary-color); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1rem; flex-shrink:0; }
+        .review-uname { font-weight:600; font-size:.9rem; }
+        .review-stars { color:#f59e0b; font-size:.9rem; }
+        .review-date { font-size:.78rem; color:#aaa; }
+        .review-comment { font-size:.9rem; color:#555; line-height:1.6; }
+        .review-empty { text-align:center; padding:2rem; color:#aaa; }
+        .review-empty i { font-size:2.5rem; display:block; margin-bottom:.5rem; }
+        .review-pagination { display:flex; gap:.4rem; justify-content:center; margin-top:1rem; }
+        .rpg-btn { padding:.35rem .75rem; border:1px solid var(--border-color); border-radius:3px; background:#fff; cursor:pointer; font-size:.85rem; }
+        .rpg-btn.active { background:var(--primary-color); color:#fff; border-color:var(--primary-color); }
+        .rpg-btn:disabled { opacity:.4; cursor:default; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-bag-shopping"></i> XH STORE
+            </a>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+                <button class="search-btn" onclick="pageSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="header-actions">
+                <div class="header-action-item" onclick="toggleWishlist()" style="position:relative;">
+                    <i class="fa-regular fa-heart"></i>
+                    <span>Yêu thích</span>
+                    <span class="wishlist-badge" id="wishlist-badge-main" style="display:none;">0</span>
+                </div>
+                <div class="header-action-item cart-trigger" onclick="window.location.href='cart.html'">
+                    <div class="cart-icon-wrap" style="position:relative;cursor:pointer;">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="cart-badge" id="cart-badge-main">0</span>
+                    </div>
+                    <span>Giỏ hàng</span>
+                </div>
+                <div class="header-action-item admin-only-btn" id="header-admin-btn" onclick="window.location.href='admin/index.html'" style="display:none; color: var(--primary-color, #ee4d2d);">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>Quản trị</span>
+                </div>
+                <div class="header-action-item user-menu" id="user-menu-trigger">
+                    <i class="fa-regular fa-circle-user"></i>
+                    <span>Tài khoản</span>
+                    <div class="user-dropdown" id="user-dropdown"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="product-detail-container">
+        <div class="product-gallery">
+            <img src="images/cosmetic_lipstick_1779182582401.png" alt="Son môi" class="main-image">
+        </div>
+
+        <div class="product-info-detail">
+            <h1>Son Môi Cao Cấp Lâu Trôi Màu Đỏ Thuần Quyến Rũ</h1>
+            <div class="price-section">₫450.000</div>
+
+            <div class="variant-section">
+                <span class="variant-title">Màu sắc</span>
+                <div class="variant-options" id="variant-group">
+                    <button class="variant-btn active">Đỏ Thuần</button>
+                    <button class="variant-btn">Cam Đất</button>
+                    <button class="variant-btn">Hồng Trà</button>
+                </div>
+            </div>
+
+            <div class="quantity-section">
+                <span class="variant-title">Số lượng</span>
+                <div class="qty-input">
+                    <button class="qty-btn" onclick="doiSoLuongSP(-1)">-</button>
+                    <input type="text" id="qty" value="1" readonly>
+                    <button class="qty-btn" onclick="doiSoLuongSP(1)">+</button>
+                </div>
+                <span style="color:var(--text-secondary);margin-left:1rem">150 sản phẩm có sẵn</span>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-add-cart">
+                    <i class="fa-solid fa-cart-plus"></i> Thêm Vào Giỏ Hàng
+                </button>
+                <button class="btn-buy-now" onclick="muaNgay()">Mua Ngay</button>
+                <button id="btn-wishlist-product" class="btn-buy-now" style="background:#fff;color:var(--primary-color);border:1px solid var(--primary-color);" onclick="toggleProductWish()">
+                    <i class="fa-regular fa-heart"></i> Yêu thích
+                </button>
+            </div>
+
+            <div style="margin-top:1.5rem;padding:1rem;border:1px solid #eee;border-radius:8px;background:#fafafa;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+                    <strong style="color:var(--primary-color);">Gợi ý cho bạn</strong>
+                    <span style="font-size:.85rem;color:#888;">Sản phẩm đã xem gần đây</span>
+                </div>
+                <div id="related-products"></div>
+            </div>
+
+            <div class="product-description" style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--text-primary);">Mô tả sản phẩm</h3>
+                <p id="product-desc" style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; white-space: pre-line;"></p>
+            </div>
+            
+            <div class="product-reviews-section" style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                <h3 style="font-size: 1rem; margin-bottom: 1rem; color: var(--text-primary);"><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Đánh Giá Từ Khách Hàng</h3>
+                <div class="reviews-summary" style="display: flex; align-items: center; gap: 2rem; background: #fafafa; padding: 1.5rem; border-radius: 4px; margin-bottom: 1.5rem;">
+                    <div style="text-align: center;">
+                        <div id="avg-rating-value" style="font-size: 2.5rem; font-weight: bold; color: #ee4d2d; line-height: 1;">0.0</div>
+                        <div style="color: #f59e0b; margin: 0.5rem 0; font-size: 1.2rem;" id="avg-rating-stars">☆☆☆☆☆</div>
+                        <div id="total-reviews-count" style="font-size: 0.85rem; color: #666;">(0 đánh giá)</div>
+                    </div>
+                </div>
+                <div id="reviews-list">
+                    <p style="color: #888; font-size: 0.9rem; font-style: italic;">Đang tải đánh giá...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let activeProduct = null;
+        let recentRelated = [];
+
+        // Parse query params to fetch product
+        async function taiChiTietSanPham() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            if (!id) {
+                alert('Không tìm thấy mã sản phẩm!');
+                window.location.href = 'index.html';
+                return;
+            }
+            try {
+                const res = await fetch(`/api/products/${id}`);
+                if (!res.ok) throw new Error('Không thể tải chi tiết sản phẩm');
+                const data = await res.json();
+                const product = data.product;
+                activeProduct = product;
+                luuDaXem(product);
+
+                // Cập nhật DOM
+                document.title = product.name + ' - XH STORE';
+                document.querySelector('.main-image').src = product.imageUrl || 'images/cosmetics_office_set_1779642650180.png';
+                document.querySelector('.main-image').alt = product.name;
+                document.querySelector('.product-info-detail h1').innerText = product.name;
+                document.querySelector('.price-section').innerText = '₫' + Number(product.price).toLocaleString('vi-VN');
+                document.getElementById('product-desc').innerText = product.description || 'Mô tả đang được cập nhật...';
+
+                 // Cập nhật lượt bán và tồn kho
+                 const stockSpan = document.querySelector('.quantity-section span:last-child');
+                 if (stockSpan) {
+                     stockSpan.innerText = `${product.stock} sản phẩm có sẵn | Đã bán ${product.soldCount}`;
+                 }
+ 
+                 // Cập nhật biến thể động
+                 const varGroup = document.getElementById('variant-group');
+                 const varSection = document.querySelector('.variant-section');
+                 if (product.variants && product.variants.length > 0) {
+                     varSection.style.display = 'block';
+                     varGroup.innerHTML = '';
+                     product.variants.forEach((v, index) => {
+                         const btn = document.createElement('button');
+                         btn.className = 'variant-btn' + (index === 0 ? ' active' : '');
+                         btn.innerText = v.name;
+                         btn.dataset.price = v.price;
+                         btn.dataset.stock = v.stock;
+                         btn.addEventListener('click', function() {
+                             document.querySelectorAll('#variant-group .variant-btn').forEach(b => b.classList.remove('active'));
+                             this.classList.add('active');
+                             document.querySelector('.price-section').innerText = '₫' + Number(v.price).toLocaleString('vi-VN');
+                             document.querySelector('.quantity-section span:last-child').innerText = `${v.stock} sản phẩm có sẵn | Đã bán ${product.soldCount}`;
+                         });
+                         varGroup.appendChild(btn);
+                     });
+                     // Chọn mặc định biến thể đầu tiên
+                     const firstVar = product.variants[0];
+                     document.querySelector('.price-section').innerText = '₫' + Number(firstVar.price).toLocaleString('vi-VN');
+                     document.querySelector('.quantity-section span:last-child').innerText = `${firstVar.stock} sản phẩm có sẵn | Đã bán ${product.soldCount}`;
+                 } else {
+                     varSection.style.display = 'none';
+                 }
+
+                 // Cập nhật nút bấm
+                 const addCartBtn = document.querySelector('.btn-add-cart');
+                 addCartBtn.onclick = (e) => {
+                     addToCart(e, product.id, product.name, layPrice(), product.imageUrl || 'images/cosmetics_office_set_1779642650180.png', layVariant());
+                 };
+             } catch (err) {
+                 console.error(err);
+                 alert('Không tìm thấy sản phẩm hoặc lỗi kết nối!');
+                 window.location.href = 'index.html';
+             }
+         }
+ 
+         function layVariant() {
+             return document.querySelector('#variant-group .variant-btn.active')?.innerText || '';
+         }
+
+         function layPrice() {
+             const activeBtn = document.querySelector('#variant-group .variant-btn.active');
+             if (activeBtn && activeBtn.dataset.price) {
+                 return Number(activeBtn.dataset.price);
+             }
+             return activeProduct ? activeProduct.price : 0;
+         }
+ 
+         function doiSoLuongSP(delta) {
+             const el = document.getElementById('qty');
+             const val = parseInt(el.value) + delta;
+             if (val >= 1) el.value = val;
+         }
+ 
+         function muaNgay() {
+             const qty = parseInt(document.getElementById('qty')?.value) || 1;
+             if (!currentProduct) return;
+             const cart = layGio();
+             const variant = selectedVariantName || '';
+             const price = layPrice();
+             const existing = cart.find(item => item.id === currentProduct.id && item.variant === variant);
+             if (existing) {
+                 existing.qty += qty;
+             } else {
+                 cart.push({ id: currentProduct.id, name: currentProduct.name, price: price, image: currentProduct.imageUrl || '', variant: variant, qty: qty });
+             }
+             luuGio(cart);
+             window.location.href = 'checkout.html';
+         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            taiChiTietSanPham();
+        });
+    </script>
+
+    <!-- Hỗ trợ / hậu mãi -->
+    <div class="reviews-section" id="support-section">
+        <div class="reviews-header">
+            <h2><i class="fa-solid fa-headset"></i> Hỗ Trợ & Hậu Mãi</h2>
+            <div class="avg-rating">
+                <div class="avg-count">Đổi trả • Hoàn tiền • Mua lại • FAQ</div>
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+            <div style="padding:1rem;border:1px solid #eee;border-radius:8px;">
+                <strong>Đổi trả dễ dàng</strong>
+                <p style="font-size:.9rem;color:#666;margin-top:.35rem;">Yêu cầu hoàn hàng trực tiếp trong Đơn hàng của tôi.</p>
+            </div>
+            <div style="padding:1rem;border:1px solid #eee;border-radius:8px;">
+                <strong>Mua lại nhanh</strong>
+                <p style="font-size:.9rem;color:#666;margin-top:.35rem;">Thêm lại sản phẩm chỉ với 1 click từ đơn cũ.</p>
+            </div>
+            <div style="padding:1rem;border:1px solid #eee;border-radius:8px;">
+                <strong>FAQ / Hỗ trợ</strong>
+                <p style="font-size:.9rem;color:#666;margin-top:.35rem;">Chính sách giao hàng, thanh toán, đổi trả rõ ràng.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        let currentProduct = null;
+        let selectedVariantName = '';
+        let reviewPage = 0;
+        let currentProductId = null;
+
+        function layPrice() {
+            if (!currentProduct) return 0;
+            if (selectedVariantName && currentProduct.variants && currentProduct.variants.length > 0) {
+                const v = currentProduct.variants.find(v => v.name === selectedVariantName);
+                if (v && v.price) return v.price;
+            }
+            return currentProduct.price;
+        }
+
+        async function loadReviews(productId, page = 0) {
+            currentProductId = productId;
+            const res = await fetch(`/api/products/${productId}/reviews?page=${page}&size=5`);
+            if (!res.ok) return;
+            const data = await res.json();
+
+            document.getElementById('reviews-section').style.display = 'block';
+            const avg = data.avgRating || 5;
+            document.getElementById('avg-score').textContent = avg.toFixed(1);
+            document.getElementById('avg-stars').textContent = '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg));
+            document.getElementById('avg-count').textContent = data.totalReviews + ' đánh giá';
+
+            const list = document.getElementById('reviews-list');
+            if (!data.reviews || !data.reviews.length) {
+                list.innerHTML = '<div class="review-empty"><i class="fa-solid fa-comment-slash"></i>Chưa có đánh giá nào. Hãy là người đầu tiên!</div>';
+            } else {
+                list.innerHTML = data.reviews.map(r => {
+                    const initials = (r.user?.username || 'A')[0].toUpperCase();
+                    const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+                    const d = new Date(r.createdAt);
+                    const dateStr = d.toLocaleDateString('vi-VN');
+                    return `<div class="review-card">
+                        <div class="review-top">
+                            <div class="review-avatar">${initials}</div>
+                            <div>
+                                <div class="review-uname">${r.user?.username || 'Ẩn danh'}</div>
+                                <div><span class="review-stars">${stars}</span> <span class="review-date">${dateStr}</span></div>
+                            </div>
+                        </div>
+                        ${r.comment ? `<div class="review-comment">${r.comment}</div>` : ''}
+                    </div>`;
+                }).join('');
+            }
+
+            // Pagination
+            const totalPages = data.totalPages || 0;
+            const pg = document.getElementById('review-pagination');
+            if (totalPages <= 1) { pg.innerHTML = ''; return; }
+            pg.innerHTML = Array.from({length: totalPages}, (_,i) =>
+                `<button class="rpg-btn ${i===data.currentPage?'active':''}" onclick="loadReviews(${productId},${i})">${i+1}</button>`
+            ).join('');
+        }
+
+        function capNhatNutYeuThich() {
+            const btn = document.getElementById('btn-wishlist-product');
+            if (!btn || !activeProduct) return;
+            const wish = layWishlist();
+            const exists = wish.some(i => (i.id || i) === activeProduct.id);
+            if (exists) {
+                btn.innerHTML = '<i class="fa-solid fa-heart"></i> Đã Yêu Thích';
+                btn.style.background = '#ffeae5';
+                btn.style.color = 'var(--primary-color)';
+                btn.style.borderColor = 'var(--primary-color)';
+            } else {
+                btn.innerHTML = '<i class="fa-regular fa-heart"></i> Yêu Thích';
+                btn.style.background = '#fff';
+                btn.style.color = 'var(--primary-color)';
+                btn.style.borderColor = 'var(--primary-color)';
+            }
+        }
+
+        function toggleProductWish() {
+            if (!activeProduct) return;
+            let wish = layWishlist();
+            const exists = wish.some(i => (i.id || i) === activeProduct.id);
+            if (exists) {
+                wish = wish.filter(i => (i.id || i) !== activeProduct.id);
+                hienToast('Đã bỏ khỏi danh sách yêu thích!');
+            } else {
+                wish.push({
+                    id: activeProduct.id,
+                    name: activeProduct.name,
+                    price: activeProduct.price,
+                    image: activeProduct.imageUrl || ''
+                });
+                hienToast('Đã thêm vào danh sách yêu thích!');
+            }
+            luuWishlist(wish);
+            capNhatNutYeuThich();
+            capNhatBadge();
+        }
+
+        // Hook vào taiChiTietSanPham
+        const _origLoad = taiChiTietSanPham;
+        async function taiChiTietSanPham() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            if (!id) { alert('Không tìm thấy mã sản phẩm!'); window.location.href='index.html'; return; }
+            try {
+                const res = await fetch(`/api/products/${id}`);
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                const product = data.product;
+                activeProduct = product;
+                luuDaXem(product);
+                capNhatNutYeuThich();
+                document.title = product.name + ' - XH STORE';
+                document.querySelector('.main-image').src = product.imageUrl || 'images/cosmetics_office_set_1779642650180.png';
+                document.querySelector('.main-image').alt = product.name;
+                document.querySelector('.product-info-detail h1').innerText = product.name;
+                document.querySelector('.price-section').innerText = '₫' + Number(product.price).toLocaleString('vi-VN');
+                document.getElementById('product-desc').innerText = product.description || 'Mô tả đang được cập nhật...';
+                const stockSpan = document.querySelector('.quantity-section span:last-child');
+                if (stockSpan) stockSpan.innerText = `${product.stock} sản phẩm có sẵn | Đã bán ${product.soldCount}`;
+                // Render variant buttons
+                const varGroup = document.getElementById('variant-group');
+                const varSection = document.querySelector('.variant-section');
+                if (product.variants && product.variants.length > 0) {
+                    varSection.style.display = 'block';
+                    varGroup.innerHTML = '';
+                    selectedVariantName = product.variants[0].name;
+                    product.variants.forEach((v, index) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'variant-btn' + (index === 0 ? ' active' : '');
+                        btn.innerText = v.name;
+                        btn.dataset.price = v.price;
+                        btn.dataset.stock = v.stock;
+                        btn.addEventListener('click', function() {
+                            document.querySelectorAll('#variant-group .variant-btn').forEach(b => b.classList.remove('active'));
+                            this.classList.add('active');
+                            selectedVariantName = v.name;
+                            document.querySelector('.price-section').innerText = '₫' + Number(v.price).toLocaleString('vi-VN');
+                            document.querySelector('.quantity-section span:last-child').innerText = `${v.stock} sản phẩm có sẵn | Đã bán ${product.soldCount}`;
+                        });
+                        varGroup.appendChild(btn);
+                    });
+                    const firstVar = product.variants[0];
+                    document.querySelector('.price-section').innerText = '₫' + Number(firstVar.price).toLocaleString('vi-VN');
+                    document.querySelector('.quantity-section span:last-child').innerText = `${firstVar.stock} sản phẩm có sẵn | Đã bán ${product.soldCount}`;
+                } else {
+                    varSection.style.display = 'none';
+                    selectedVariantName = '';
+                }
+
+                currentProduct = product;
+                const addCartBtn = document.querySelector('.btn-add-cart');
+                addCartBtn.onclick = (e) => {
+                    const qty = parseInt(document.getElementById('qty')?.value) || 1;
+                    addToCart(e, product.id, product.name, layPrice(), product.imageUrl||'images/cosmetics_office_set_1779642650180.png', layVariant(), qty);
+                };
+                renderRelatedByCategory(product);
+                loadReviews(product.id);
+            } catch(err) {
+                alert('Không tìm thấy sản phẩm hoặc lỗi kết nối!');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function renderRelatedByCategory(product) {
+            const el = document.getElementById('related-products');
+            if (!el) return;
+            el.innerHTML = `<div style="font-size:.9rem;color:#666;">Gợi ý đang được cập nhật theo lịch sử xem và danh mục: <b>${product.category?.name || ''}</b></div>`;
+        }
+
+        async function loadReviews(productId) {
+            const listEl = document.getElementById('reviews-list');
+            try {
+                const res = await fetch(`/api/products/${productId}/reviews?page=0&size=50`);
+                if (!res.ok) throw new Error('Không thể tải đánh giá');
+                const data = await res.json();
+                
+                const avg = data.avgRating || 0;
+                document.getElementById('avg-rating-value').innerText = avg.toFixed(1);
+                document.getElementById('total-reviews-count').innerText = `(${data.totalReviews} đánh giá)`;
+                
+                const STARS = n => '★'.repeat(n) + '☆'.repeat(5-n);
+                document.getElementById('avg-rating-stars').innerText = STARS(Math.round(avg));
+                
+                const reviews = data.reviews || [];
+                if (reviews.length === 0) {
+                    listEl.innerHTML = `<p style="color: #999; font-size: 0.9rem; font-style: italic; padding: 1rem 0;">Chưa có đánh giá nào cho sản phẩm này.</p>`;
+                    return;
+                }
+                
+                listEl.innerHTML = reviews.map(r => {
+                    const name = r.user ? r.user.username : 'Khách hàng';
+                    const date = new Date(r.createdAt).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    return `
+                        <div style="padding: 1rem 0; border-bottom: 1px solid #f0f0f0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                                <span style="font-weight: 600; font-size: 0.9rem; color: #333;">${name}</span>
+                                <span style="font-size: 0.78rem; color: #999;">${date}</span>
+                            </div>
+                            <div style="color: #f59e0b; font-size: 0.85rem; margin-bottom: 0.4rem;">${STARS(r.rating)}</div>
+                            <p style="font-size: 0.88rem; color: #555; margin: 0; line-height: 1.5;">${r.comment || '<span style="color:#aaa; font-style:italic;">Không có bình luận</span>'}</p>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error(err);
+                listEl.innerHTML = `<p style="color: #ef4444; font-size: 0.9rem;">Không thể tải đánh giá sản phẩm.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

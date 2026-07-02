@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký - XH STORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --primary-color: #00a8ff;
+            --primary-hover: #0097e6;
+            --secondary-color: #74b9ff;
+            --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #f1f5f9 100%);
+            --card-shadow: 0 10px 25px -5px rgba(0, 168, 255, 0.1), 0 8px 16px -6px rgba(0, 0, 0, 0.05);
+            --input-border-focus: #00a8ff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+        body { 
+            background: var(--bg-gradient); 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+        .auth-wrap {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            padding: 3rem 1rem;
+        }
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95); 
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 168, 255, 0.1);
+            width: 100%; max-width: 480px;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        .auth-card:hover {
+            transform: translateY(-2px);
+        }
+        .auth-logo {
+            text-align: center; margin-bottom: 1.2rem;
+        }
+        .auth-logo a {
+            font-size: 1.8rem; font-weight: 800; color: var(--text-dark);
+            text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+            transition: opacity 0.2s;
+        }
+        .auth-logo a:hover {
+            opacity: 0.9;
+        }
+        .auth-logo a i { color: var(--primary-color); }
+        .auth-logo a span { color: var(--primary-color); }
+        .auth-title { 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            margin-bottom: 1.8rem; 
+            color: var(--text-dark); 
+            text-align: center;
+        }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-size: 0.88rem; color: var(--text-dark); margin-bottom: 6px; font-weight: 600; }
+        
+        .input-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-icon-wrapper i.input-icon {
+            position: absolute;
+            left: 14px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+            pointer-events: none;
+        }
+        .input-icon-wrapper input {
+            width: 100%; padding: 0.75rem 1rem 0.75rem 2.6rem;
+            border: 1px solid #cbd5e1; border-radius: 8px;
+            font-family: inherit; font-size: 0.95rem; outline: none;
+            transition: all 0.2s ease; box-sizing: border-box;
+            background: #f8fafc;
+        }
+        .input-icon-wrapper input:focus { 
+            border-color: var(--input-border-focus); 
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.15);
+        }
+        .input-icon-wrapper input:focus + i.input-icon {
+            color: var(--primary-color);
+        }
+        
+        .form-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .btn-submit {
+            width: 100%; padding: 0.85rem;
+            background: var(--primary-color); color: #fff;
+            border: none; border-radius: 8px;
+            font-size: 1rem; font-weight: 600; cursor: pointer;
+            transition: all 0.2s ease; margin-top: 0.8rem;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 168, 255, 0.2);
+        }
+        .btn-submit:hover { 
+            background: var(--primary-hover); 
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(0, 168, 255, 0.3);
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        .auth-error {
+            background: #fff5f5; color: #e11d48;
+            border: 1px solid #fee2e2; border-radius: 8px;
+            padding: 0.75rem 1rem; font-size: 0.9rem;
+            margin-bottom: 1.2rem; display: none;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .auth-success {
+            background: #f0fdf4; color: #16a34a;
+            border: 1px solid #dcfce7; border-radius: 8px;
+            padding: 0.75rem 1rem; font-size: 0.9rem;
+            margin-bottom: 1.2rem; display: none;
+            text-align: center;
+        }
+        .auth-footer {
+            text-align: center; margin-top: 1.2rem;
+            font-size: 0.9rem; color: var(--text-muted);
+        }
+        .auth-footer a { color: var(--primary-color); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+        .auth-footer a:hover { color: var(--primary-hover); text-decoration: underline; }
+        
+        .password-wrap { width: 100%; position: relative; display: flex; align-items: center; }
+        .password-wrap input { padding-right: 2.8rem; }
+        .toggle-pw {
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1rem;
+            padding: 4px; display: flex; align-items: center; justify-content: center;
+            transition: color 0.2s;
+        }
+        .toggle-pw:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-container">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-bag-shopping"></i> XH STORE
+        </a>
+        <div style="font-size:1.1rem;margin-left:1rem;border-left:1px solid rgba(255,255,255,0.3);padding-left:1rem;flex:1;">
+            Đăng Ký
+        </div>
+    </div>
+</header>
+
+<div class="auth-wrap">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <a href="index.html">
+                <i class="fa-solid fa-bag-shopping"></i> XH<span>STORE</span>
+            </a>
+        </div>
+        <div class="auth-title">Tạo tài khoản mới</div>
+
+        <div class="auth-error" id="auth-error"></div>
+        <div class="auth-success" id="auth-success"></div>
+
+        <form id="register-form" onsubmit="handleRegister(event)">
+            <div class="form-group">
+                <label for="username">Tên đăng nhập <span style="color:var(--primary-color)">*</span></label>
+                <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-user input-icon"></i>
+                    <input type="text" id="username" placeholder="4-50 ký tự, chỉ dùng chữ/số/_" autocomplete="username" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu <span style="color:var(--primary-color)">*</span></label>
+                <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input type="password" id="password" placeholder="Ít nhất 6 ký tự" autocomplete="new-password" required>
+                    <button type="button" class="toggle-pw" onclick="togglePw('password', this)">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="confirm-pw">Xác nhận mật khẩu <span style="color:var(--primary-color)">*</span></label>
+                <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-shield-halved input-icon"></i>
+                    <input type="password" id="confirm-pw" placeholder="Nhập lại mật khẩu" autocomplete="new-password" required>
+                    <button type="button" class="toggle-pw" onclick="togglePw('confirm-pw', this)">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input type="email" id="email" placeholder="email@example.com (tùy chọn)" autocomplete="email">
+                </div>
+            </div>
+            <div class="form-grid2">
+                <div class="form-group">
+                    <label for="phone">Số điện thoại</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-phone input-icon"></i>
+                        <input type="tel" id="phone" placeholder="0901234567">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Địa chỉ</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-map-location-dot input-icon"></i>
+                        <input type="text" id="address" placeholder="Địa chỉ giao hàng">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit" id="register-btn">
+                <i class="fa-solid fa-user-plus"></i> Đăng Ký
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a>
+        </div>
+        <div class="auth-footer" style="margin-top:0.5rem;">
+            <a href="index.html"><i class="fa-solid fa-arrow-left"></i> Quay về trang chủ</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    if (localStorage.getItem('currentUser')) {
+        window.location.href = 'index.html';
+    }
+
+    function togglePw(id, btn) {
+        const input = document.getElementById(id);
+        const isText = input.type === 'text';
+        input.type = isText ? 'password' : 'text';
+        btn.innerHTML = isText
+            ? '<i class="fa-regular fa-eye"></i>'
+            : '<i class="fa-regular fa-eye-slash"></i>';
+    }
+
+    function showError(msg) {
+        const el = document.getElementById('auth-error');
+        el.textContent = msg;
+        el.style.display = 'block';
+        document.getElementById('auth-success').style.display = 'none';
+    }
+
+    function showSuccess(msg) {
+        const el = document.getElementById('auth-success');
+        el.innerHTML = msg;
+        el.style.display = 'block';
+        document.getElementById('auth-error').style.display = 'none';
+    }
+
+    async function handleRegister(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPw = document.getElementById('confirm-pw').value;
+        const email    = document.getElementById('email').value.trim();
+        const phone    = document.getElementById('phone').value.trim();
+        const address  = document.getElementById('address').value.trim();
+        const btn      = document.getElementById('register-btn');
+
+        document.getElementById('auth-error').style.display = 'none';
+
+        if (password !== confirmPw) {
+            showError('Mật khẩu xác nhận không khớp.');
+            return;
+        }
+
+        if (phone && !/^0\d{9,10}$/.test(phone)) {
+            showError('Số điện thoại không hợp lệ (phải bắt đầu bằng 0, gồm 10-11 chữ số)');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang đăng ký...';
+
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, email, phone, address })
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                showError(data.error || 'Đăng ký thất bại');
+                return;
+            }
+
+            showSuccess(`<i class="fa-solid fa-check-circle"></i> Đăng ký thành công! Chuyển đến trang đăng nhập...`);
+            document.getElementById('register-form').reset();
+
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+
+        } catch (err) {
+            showError('Mất kết nối. Vui lòng thử lại.');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Đăng Ký';
+        }
+    }
+</script>
+</body>
+</html>

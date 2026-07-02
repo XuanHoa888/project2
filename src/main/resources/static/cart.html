@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng - XH STORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .cart-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+
+        .cart-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            background: var(--white);
+            padding: 1.5rem 1rem;
+            border-radius: 4px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .cart-product {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cart-product img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+        }
+
+        .cart-product-info h3 {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .cart-product-variant {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .cart-price {
+            color: var(--text-primary);
+        }
+
+        .cart-qty {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            width: fit-content;
+            border-radius: 2px;
+        }
+
+        .cart-qty button {
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cart-qty input {
+            width: 40px;
+            height: 30px;
+            text-align: center;
+            border: none;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            outline: none;
+        }
+
+        .cart-total-price {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .cart-action {
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cart-action:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-footer {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 4px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 2rem;
+            position: sticky;
+            bottom: 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .checkout-btn {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .checkout-btn:hover {
+            background-color: var(--primary-hover);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-bag-shopping"></i> XH STORE
+            </a>
+            <div style="font-size: 1.2rem; margin-left: 1rem; border-left: 1px solid #fff; padding-left: 1rem; flex: 1;">
+                Giỏ Hàng
+            </div>
+            <div class="search-bar" style="margin: 0 1rem; max-width: 450px;">
+                <input type="text" id="search-input" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+                <button class="search-btn" onclick="pageSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="header-actions">
+                <div class="header-action-item" onclick="toggleWishlist()" style="position:relative;">
+                    <i class="fa-regular fa-heart"></i>
+                    <span>Yêu thích</span>
+                    <span class="wishlist-badge" id="wishlist-badge-main" style="display:none;">0</span>
+                </div>
+                <div class="header-action-item admin-only-btn" id="header-admin-btn" onclick="window.location.href='admin/index.html'" style="display:none; color: var(--primary-color, #ee4d2d);">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>Quản trị</span>
+                </div>
+                <div class="header-action-item user-menu" id="user-menu-trigger">
+                    <i class="fa-regular fa-circle-user"></i>
+                    <span>Tài khoản</span>
+                    <div class="user-dropdown" id="user-dropdown"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Container -->
+    <div class="cart-container">
+        <div class="cart-header">
+            <div>Sản Phẩm</div>
+            <div>Đơn Giá</div>
+            <div>Số Lượng</div>
+            <div>Số Tiền</div>
+            <div>Thao Tác</div>
+        </div>
+
+        <div id="cart-items-container">
+            <!-- Items will be injected by main.js -->
+        </div>
+
+        <div class="cart-footer" id="cart-summary-footer">
+            <div style="font-size: 1.1rem;">
+                Tổng thanh toán (<span id="cart-total-items">0</span>): <span id="cart-total-price" style="color: var(--primary-color); font-size: 1.5rem; font-weight: bold; margin-left: 10px;">₫0</span>
+            </div>
+            <button class="checkout-btn" onclick="goToCheckout()">Mua Hàng</button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        function goToCheckout() {
+            const cart = layGio();
+            if (cart.length === 0) {
+                alert('Giỏ hàng trống! Vui lòng thêm sản phẩm trước.');
+                return;
+            }
+            window.location.href = 'checkout.html';
+        }
+    </script>
+</body>
+</html>

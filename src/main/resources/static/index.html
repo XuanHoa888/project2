@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XH STORE - Thời Trang & Mỹ Phẩm Công Sở</title>
+    <meta name="description" content="XH Store - Thời trang, mỹ phẩm, phụ kiện bình dân cho nàng công sở. Sale khủng, hàng hot, gian hàng đa dạng theo chủ đề.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+<!--HEADER -->
+<header class="header" id="main-header">
+    <div class="header-main">
+        <div class="header-container">
+            <a href="index.html" class="logo" id="site-logo">
+                <div class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                <div class="logo-text">XH<span>STORE</span></div>
+            </a>
+            
+            <div class="search-bar" id="search-bar">
+                <input type="text" id="search-input" placeholder="Tìm kiếm quần áo, mỹ phẩm, phụ kiện..." autocomplete="off">
+                <button class="search-btn" id="search-btn" onclick="doSearch()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+            
+            <div class="header-actions">
+                <div class="header-action-item" onclick="toggleWishlist()" style="position:relative;">
+                    <i class="fa-regular fa-heart"></i>
+                    <span>Yêu thích</span>
+                    <span class="wishlist-badge" id="wishlist-badge-main" style="display:none;">0</span>
+                </div>
+                <div class="header-action-item cart-trigger" onclick="window.location.href='cart.html'">
+                    <div class="cart-icon-wrap">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="cart-badge" id="cart-badge-main">0</span>
+                    </div>
+                    <span>Giỏ hàng</span>
+                </div>
+                <div class="header-action-item admin-only-btn" id="header-admin-btn" onclick="window.location.href='admin/index.html'" style="display:none; color: var(--primary-color, #ee4d2d);">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>Quản trị</span>
+                </div>
+                <div class="header-action-item user-menu" id="user-menu-trigger">
+                    <i class="fa-regular fa-circle-user"></i>
+                    <span>Tài khoản</span>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <a href="login.html"><i class="fa-solid fa-user"></i> Đăng nhập</a>
+                        <a href="register.html"><i class="fa-solid fa-user-plus"></i> Đăng ký</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="orders.html"><i class="fa-solid fa-box"></i> Đơn hàng của tôi</a>
+                        <a href="custom-order.html"><i class="fa-solid fa-wand-magic-sparkles"></i> Đặt hàng mẫu</a>
+                        <a href="profile.html"><i class="fa-solid fa-user-gear"></i> Tài khoản</a>
+                        <a href="#"><i class="fa-solid fa-ticket"></i> Kho voucher</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="header-nav" id="main-nav">
+        <div class="nav-container">
+            <a href="javascript:void(0)" onclick="handleNavClick(this, 'scroll-top')" class="nav-item active"><i class="fa-solid fa-house"></i> Trang Chủ</a>
+            <a href="shop.html?cat=1" class="nav-item"><i class="fa-solid fa-shirt"></i> Thời Trang</a>
+            <a href="shop.html?cat=2" class="nav-item"><i class="fa-solid fa-star"></i> Mỹ Phẩm</a>
+            <a href="shop.html?cat=3" class="nav-item"><i class="fa-solid fa-gem"></i> Trang Sức</a>
+            <a href="shop.html?cat=4" class="nav-item"><i class="fa-solid fa-bag-shopping"></i> Phụ Kiện</a>
+            <a href="shop.html?tag=sale" class="nav-item sale-nav"><i class="fa-solid fa-fire"></i> SALE SỐC</a>
+            <a href="javascript:void(0)" onclick="handleNavClick(this, 'scroll-to', 'best-seller-section')" class="nav-item"><i class="fa-solid fa-award"></i> Best Seller</a>
+            <a href="shop.html" class="nav-item" style="font-weight:600;"><i class="fa-solid fa-store"></i> Cửa Hàng</a>
+            <a href="custom-order.html" class="nav-item"><i class="fa-solid fa-wand-magic-sparkles"></i> Đặt Hàng Mẫu</a>
+            <a href="javascript:void(0)" onclick="handleNavClick(this, 'scroll-to', 'voucher-section')" class="nav-item hot-nav"><i class="fa-solid fa-ticket"></i> Voucher</a>
+        </div>
+    </nav>
+</header>
+
+<!-- HERO / FLASH SALE BANNER -->
+<section class="hero-section" id="hero">
+    <div class="hero-carousel" id="hero-carousel">
+        <!-- Slide 1: Flash Sale -->
+        <div class="hero-slide active" id="slide-1">
+            <div class="hero-slide-bg" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #533483 100%);">
+                <div class="hero-slide-particles"></div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="hero-badge flash-badge"><i class="fa-solid fa-bolt"></i> FLASH SALE</div>
+                    <h1 class="hero-title">Sale Bùng Nổ<br><span class="gradient-text">Hè</span></h1>
+                    <p class="hero-subtitle">Giảm đến <strong>70%</strong> thời trang, mỹ phẩm, phụ kiện công sở</p>
+                    <div class="hero-countdown" id="flash-countdown">
+                        <div class="countdown-item"><span id="cd-hours">05</span><small>Giờ</small></div>
+                        <div class="countdown-sep">:</div>
+                        <div class="countdown-item"><span id="cd-mins">23</span><small>Phút</small></div>
+                        <div class="countdown-sep">:</div>
+                        <div class="countdown-item"><span id="cd-secs">45</span><small>Giây</small></div>
+                    </div>
+                    <div class="hero-cta">
+                        <button class="btn-primary" onclick="scrollToSection('flash-sale-section')">Mua Ngay <i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="btn-ghost" onclick="scrollToSection('themed-sections')">Xem Gian Hàng</button>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="hero-img-stack">
+                        <img src="images/sale_banner_homepage_1779642685894.png" alt="Sale banner" class="hero-main-img">
+                        <div class="hero-float-badge top-badge">🔥 Giảm 70%</div>
+                        <div class="hero-float-badge bot-badge">✨ 1.200+ sản phẩm</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Slide 2: Thời trang công sở -->
+        <div class="hero-slide" id="slide-2">
+            <div class="hero-slide-bg" style="background: linear-gradient(135deg, #2d3436 0%, #636e72 50%, #b2bec3 100%);"></div>
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="hero-badge office-badge"><i class="fa-solid fa-briefcase"></i> CÔNG SỞ SANG TRỌNG</div>
+                    <h1 class="hero-title">Thời Trang<br><span class="gradient-text-warm">Nàng Công Sở</span></h1>
+                    <p class="hero-subtitle">Bộ sưu tập <strong>mới nhất</strong> — Phong cách chuyên nghiệp, giá bình dân</p>
+                    <div class="hero-cta">
+                        <button class="btn-primary warm-btn" onclick="scrollToSection('shop-fashion')">Khám Phá <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <img src="images/office_fashion_set_1779642635158.png" alt="Thời trang công sở" class="hero-main-img solo-img">
+                </div>
+            </div>
+        </div>
+        <!-- Slide 3: Làm đẹp -->
+        <div class="hero-slide" id="slide-3">
+            <div class="hero-slide-bg" style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 40%, #6c5ce7 100%);"></div>
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="hero-badge beauty-badge"><i class="fa-solid fa-star"></i> LÀM ĐẸP MỖI NGÀY</div>
+                    <h1 class="hero-title">Mỹ Phẩm &<br><span class="gradient-text-cool">Chăm Sóc Da</span></h1>
+                    <p class="hero-subtitle">Bộ sưu tập làm đẹp <strong>Hàn Quốc</strong> — Giá từ 99K</p>
+                    <div class="hero-cta">
+                        <button class="btn-primary" onclick="scrollToSection('shop-beauty')">Xem Ngay <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <img src="images/cosmetics_office_set_1779642650180.png" alt="Mỹ phẩm" class="hero-main-img solo-img">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-dots" id="hero-dots">
+        <button class="hero-dot active" onclick="goToSlide(0)"></button>
+        <button class="hero-dot" onclick="goToSlide(1)"></button>
+        <button class="hero-dot" onclick="goToSlide(2)"></button>
+    </div>
+    <button class="hero-arrow prev-arrow" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="hero-arrow next-arrow" onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
+</section>
+
+<!--  QUICK CATEGORIES -->
+<section class="quick-cats" id="quick-cats">
+    <div class="container">
+        <div class="cats-grid">
+            <div class="cat-card cat-fashion" onclick="window.location.href='shop.html?cat=1'">
+                <div class="cat-icon"><i class="fa-solid fa-shirt"></i></div>
+                <div class="cat-info">
+                    <span class="cat-name">Thời Trang</span>
+                    <span class="cat-count" id="cat-count-fashion">420+ sản phẩm</span>
+                </div>
+            </div>
+            <div class="cat-card cat-beauty" onclick="window.location.href='shop.html?cat=2'">
+                <div class="cat-icon"><i class="fa-solid fa-face-smile"></i></div>
+                <div class="cat-info">
+                    <span class="cat-name">Mỹ Phẩm</span>
+                    <span class="cat-count" id="cat-count-beauty">310+ sản phẩm</span>
+                </div>
+            </div>
+            <div class="cat-card cat-jewel" onclick="window.location.href='shop.html?cat=3'">
+                <div class="cat-icon"><i class="fa-solid fa-gem"></i></div>
+                <div class="cat-info">
+                    <span class="cat-name">Trang Sức</span>
+                    <span class="cat-count" id="cat-count-jewelry">180+ sản phẩm</span>
+                </div>
+            </div>
+            <div class="cat-card cat-acc" onclick="window.location.href='shop.html?cat=4'">
+                <div class="cat-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                <div class="cat-info">
+                    <span class="cat-name">Phụ Kiện</span>
+                    <span class="cat-count" id="cat-count-accessories">250+ sản phẩm</span>
+                </div>
+            </div>
+            <div class="cat-card cat-skincare" onclick="window.location.href='shop.html?cat=5'">
+                <div class="cat-icon"><i class="fa-solid fa-droplet"></i></div>
+                <div class="cat-info">
+                    <span class="cat-name">Chăm Sóc Da</span>
+                    <span class="cat-count" id="cat-count-skincare">200+ sản phẩm</span>
+                </div>
+            </div>
+            <div class="cat-card cat-sale" onclick="window.location.href='shop.html?tag=sale'">
+                <div class="cat-icon fire-icon"><i class="fa-solid fa-fire"></i></div>
+                <div class="cat-info">
+                    <span class="cat-name">SALE SỐC</span>
+                    <span class="cat-count">Giảm đến 70%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FLASH SALE SECTION -->
+<section class="section flash-sale-section" id="flash-sale-section">
+    <div class="container">
+        <div class="section-header sale-header">
+            <div class="section-header-left">
+                <div class="sale-fire-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div>
+                    <h2 class="section-title-text">Flash Sale</h2>
+                    <p class="section-subtitle">Kết thúc sau</p>
+                </div>
+                <div class="sale-countdown-inline" id="sale-countdown">
+                    <div class="scd-block"><span id="scd-h">05</span><small>g</small></div>
+                    <span class="scd-sep">:</span>
+                    <div class="scd-block"><span id="scd-m">23</span><small>p</small></div>
+                    <span class="scd-sep">:</span>
+                    <div class="scd-block"><span id="scd-s">45</span><small>s</small></div>
+                </div>
+            </div>
+            <a href="#" class="section-view-all">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <div class="products-row" id="flash-sale-grid">
+            <!-- JS will render these -->
+        </div>
+    </div>
+</section>
+
+<!-- HOT TREND SECTION -->
+<section class="section hot-section" id="hot-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-header-left">
+                <div class="hot-icon"><i class="fa-solid fa-fire"></i></div>
+                <div>
+                    <h2 class="section-title-text">Mẫu Hot Tuần Này</h2>
+                    <p class="section-subtitle">Xu hướng đang được yêu thích nhất</p>
+                </div>
+            </div>
+            <div class="filter-tabs" id="hot-filters">
+                <button class="ftab active" data-filter="all" onclick="filterHot(this, 'all')">Tất cả</button>
+                <button class="ftab" data-filter="fashion" onclick="filterHot(this, 'fashion')">Thời trang</button>
+                <button class="ftab" data-filter="beauty" onclick="filterHot(this, 'beauty')">Làm đẹp</button>
+                <button class="ftab" data-filter="accessories" onclick="filterHot(this, 'accessories')">Phụ kiện</button>
+            </div>
+        </div>
+
+        <div class="products-grid-4" id="hot-grid">
+            <!-- JS render -->
+        </div>
+    </div>
+</section>
+
+<section class="section best-seller-section" id="best-seller-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-header-left">
+                <div class="hot-icon"><i class="fa-solid fa-award"></i></div>
+                <div>
+                    <h2 class="section-title-text">Best Seller</h2>
+                    <p class="section-subtitle">Sản phẩm được mua nhiều nhất</p>
+                </div>
+            </div>
+        </div>
+        <div class="products-grid-4" id="best-seller-grid"></div>
+    </div>
+</section>
+
+<section class="section voucher-section" id="voucher-section">
+    <div class="container">
+        <div class="promo-panel">
+            <div>
+                <h2>Voucher & ưu đãi</h2>
+                <p>Nhập mã giảm giá tại checkout, hoặc theo dõi chương trình sale theo từng danh mục.</p>
+            </div>
+            <div class="promo-actions">
+                <a href="checkout.html" class="btn-primary">Dùng voucher ngay</a>
+                <a href="orders.html" class="btn-ghost">Xem đơn hàng</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- THEMED BOOTHS / GIAN HÀNG CHỦ ĐỀ -->
+<section class="themed-sections" id="themed-sections">
+    <div class="container">
+        <div class="themed-header">
+            <h2 class="section-title-text">Gian Hàng Theo Chủ Đề</h2>
+            <p class="section-subtitle">Khám phá bộ sưu tập được curated cho bạn</p>
+        </div>
+
+        <!-- Booth 1: Công sở chuyên nghiệp -->
+        <div class="themed-booth booth-office" id="shop-fashion">
+            <div class="booth-header">
+                <div class="booth-title-group">
+                    <div class="booth-icon office-theme-icon"><i class="fa-solid fa-briefcase"></i></div>
+                    <div>
+                        <h3 class="booth-name" id="booth-office-name">Công Sở Chuyên Nghiệp</h3>
+                        <p class="booth-desc" id="booth-office-desc">Trang phục tinh tế, lịch lãm cho nàng văn phòng</p>
+                    </div>
+                </div>
+                <div class="booth-actions">
+                    <span class="booth-sale-tag" id="booth-office-tag">-20%</span>
+                    <a href="shop.html?cat=1" class="booth-view-all">Xem cửa hàng <i class="fa-solid fa-store"></i></a>
+                </div>
+            </div>
+            <div class="booth-layout">
+                <div class="booth-banner">
+                    <img src="images/office_fashion_set_1779642635158.png" alt="Thời trang công sở" id="booth-office-img">
+                    <div class="booth-banner-overlay">
+                        <p id="booth-office-subtitle">New Arrival</p>
+                        <h4 id="booth-office-title">Bộ sưu tập Hè</h4>
+                        <button class="btn-booth" onclick="window.location.href='shop.html?cat=1'">Mua ngay</button>
+                    </div>
+                </div>
+                <div class="booth-products" id="booth-office-products">
+                    <!-- JS render -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Booth 2: Làm đẹp mỗi ngày -->
+        <div class="themed-booth booth-beauty" id="shop-beauty">
+            <div class="booth-header">
+                <div class="booth-title-group">
+                    <div class="booth-icon beauty-theme-icon"><i class="fa-solid fa-star"></i></div>
+                    <div>
+                        <h3 class="booth-name" id="booth-beauty-name">Làm Đẹp Mỗi Ngày</h3>
+                        <p class="booth-desc" id="booth-beauty-desc">Mỹ phẩm, skincare Hàn Quốc chất lượng cao giá tốt</p>
+                    </div>
+                </div>
+                <div class="booth-actions">
+                    <span class="booth-sale-tag beauty-sale" id="booth-beauty-tag">-30%</span>
+                    <a href="shop.html?cat=2" class="booth-view-all">Xem cửa hàng <i class="fa-solid fa-store"></i></a>
+                </div>
+            </div>
+            <div class="booth-layout">
+                <div class="booth-banner">
+                    <img src="images/cosmetics_office_set_1779642650180.png" alt="Mỹ phẩm" id="booth-beauty-img">
+                    <div class="booth-banner-overlay beauty-overlay">
+                        <p id="booth-beauty-subtitle">Best Seller</p>
+                        <h4 id="booth-beauty-title">Chăm da tại nhà</h4>
+                        <button class="btn-booth beauty-btn" onclick="window.location.href='shop.html?cat=2'">Mua ngay</button>
+                    </div>
+                </div>
+                <div class="booth-products" id="booth-beauty-products">
+                    <!-- JS render -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Booth 3: Trang sức & Phụ kiện -->
+        <div class="themed-booth booth-jewel" id="shop-jewel">
+            <div class="booth-header">
+                <div class="booth-title-group">
+                    <div class="booth-icon jewel-theme-icon"><i class="fa-solid fa-gem"></i></div>
+                    <div>
+                        <h3 class="booth-name" id="booth-jewel-name">Trang Sức & Phụ Kiện</h3>
+                        <p class="booth-desc" id="booth-jewel-desc">Tôn lên vẻ đẹp tinh tế với phụ kiện thời thượng</p>
+                    </div>
+                </div>
+                <div class="booth-actions">
+                    <span class="booth-sale-tag jewel-sale" id="booth-jewel-tag">-15%</span>
+                    <a href="shop.html?cat=3" class="booth-view-all">Xem cửa hàng <i class="fa-solid fa-store"></i></a>
+                </div>
+            </div>
+            <div class="booth-layout">
+                <div class="booth-banner">
+                    <img src="images/accessories_jewelry_set_1779642671042.png" alt="Trang sức" id="booth-jewel-img">
+                    <div class="booth-banner-overlay jewel-overlay">
+                        <p id="booth-jewel-subtitle">Premium</p>
+                        <h4 id="booth-jewel-title">Trang sức tinh tế</h4>
+                        <button class="btn-booth jewel-btn" onclick="window.location.href='shop.html?cat=3'">Mua ngay</button>
+                    </div>
+                </div>
+                <div class="booth-products" id="booth-jewel-products">
+                    <!-- JS render -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- SALE MANAGEMENT ADMIN PANEL (toggle) -->
+<div class="admin-fab" id="admin-fab" title="Quản lý Sale" onclick="toggleAdminPanel()">
+    <i class="fa-solid fa-chart-line"></i>
+    <span class="fab-label">Quản lý Sale</span>
+</div>
+
+<div class="admin-panel" id="admin-panel">
+    <div class="admin-panel-header">
+        <h3><i class="fa-solid fa-chart-line"></i> Bảng Quản Lý Sale</h3>
+        <button class="admin-close" onclick="toggleAdminPanel()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="admin-panel-body">
+        <!-- Tab Quản lý đợt sale -->
+        <div class="admin-tabs">
+            <button class="atab active" onclick="switchAdminTab(this,'tab-stats')">Thống Kê</button>
+            <button class="atab" onclick="switchAdminTab(this,'tab-sales')">Đợt Sale</button>
+            <button class="atab" onclick="switchAdminTab(this,'tab-hot')">Mẫu Hot</button>
+            <button class="atab" onclick="switchAdminTab(this,'tab-voucher')">Voucher</button>
+        </div>
+
+        <div class="admin-tab-content active" id="tab-stats">
+            <div class="admin-section-header">
+                <h4>Thống Kê Cơ Sở Dữ Liệu</h4>
+            </div>
+            <div class="stats-cards-mini" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                <div style="background:#e3f2fd; padding:12px; border-radius:6px; border-left:4px solid #1976d2;">
+                    <small style="color:#666; font-size:0.75rem; display:block;">Tổng Doanh thu</small>
+                    <div id="stats-revenue" style="font-size:1.1rem; font-weight:800; color:#1976d2; margin-top:4px;">₫0</div>
+                </div>
+                <div style="background:#e8f5e9; padding:12px; border-radius:6px; border-left:4px solid #2e7d32;">
+                    <small style="color:#666; font-size:0.75rem; display:block;">Tổng Đơn hàng</small>
+                    <div id="stats-orders" style="font-size:1.1rem; font-weight:800; color:#2e7d32; margin-top:4px;">0</div>
+                </div>
+                <div style="background:#fff3e0; padding:12px; border-radius:6px; border-left:4px solid #ef6c00;">
+                    <small style="color:#666; font-size:0.75rem; display:block;">Tổng Sản phẩm</small>
+                    <div id="stats-products" style="font-size:1.1rem; font-weight:800; color:#ef6c00; margin-top:4px;">0</div>
+                </div>
+                <div style="background:#f3e5f5; padding:12px; border-radius:6px; border-left:4px solid #8e24aa;">
+                    <small style="color:#666; font-size:0.75rem; display:block;">Khách hàng (Client)</small>
+                    <div id="stats-users" style="font-size:1.1rem; font-weight:800; color:#8e24aa; margin-top:4px;">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-tab-content" id="tab-sales">
+            <div class="admin-section-header">
+                <h4>Danh Sách Đợt Sale</h4>
+            </div>
+            <div class="admin-sale-list" id="admin-sale-list">
+                <!-- JS render -->
+            </div>
+        </div>
+
+        <div class="admin-tab-content" id="tab-hot">
+            <div class="admin-section-header">
+                <h4>Quản Lý Mẫu Hot</h4>
+            </div>
+            <div class="hot-manage-grid" id="hot-manage-grid">
+                <!-- JS render -->
+            </div>
+        </div>
+
+        <div class="admin-tab-content" id="tab-voucher">
+            <div class="admin-section-header">
+                <h4>Danh Sách Voucher</h4>
+                <button class="btn-admin-add" onclick="openAddVoucher()"><i class="fa-solid fa-plus"></i> Thêm voucher</button>
+            </div>
+            <div id="voucher-list-admin">
+                <!-- JS render -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="admin-overlay" id="admin-overlay" onclick="toggleAdminPanel()"></div>
+
+<!-- Modal Sửa Đợt Sale / Gian Hàng -->
+<div class="modal" id="modal-edit-sale">
+    <div class="modal-box" style="max-width: 500px; background:#fff; padding:1.8rem; border-radius:8px;">
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem;">
+            <h4 style="font-size:1.1rem; font-weight:700; color:#1e293b;"><i class="fa-solid fa-store" style="color:#ee4d2d; margin-right:8px;"></i>Cấu Hình Gian Hàng & Đợt Sale</h4>
+            <button class="modal-close" onclick="closeModal('modal-edit-sale')" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:#64748b;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="edit-booth-id">
+            <input type="hidden" id="edit-booth-key">
+            
+            <div class="form-group" style="margin-bottom:1rem;">
+                <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Tên gian hàng</label>
+                <input type="text" id="edit-booth-name" placeholder="VD: Thời Trang Công Sở" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit;">
+            </div>
+            
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom:1rem;">
+                <div class="form-group">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Nhãn Khuyến Mãi (Sale Tag)</label>
+                    <input type="text" id="edit-booth-tag" placeholder="VD: Giảm 50%, Hot, New" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit;">
+                </div>
+                <div class="form-group">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Tiêu đề phụ Banner</label>
+                    <input type="text" id="edit-booth-subtitle" placeholder="VD: OFFICE FASHION SET" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit;">
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom:1rem;">
+                <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Tiêu đề chính Banner</label>
+                <input type="text" id="edit-booth-title" placeholder="VD: Lựa Chọn Thanh Lịch Cho Nàng" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit;">
+            </div>
+            
+            <div class="form-group" style="margin-bottom:1rem;">
+                <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Mô tả gian hàng</label>
+                <textarea id="edit-booth-desc" rows="2" placeholder="Nhập mô tả chi tiết..." style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit; resize:vertical;"></textarea>
+            </div>
+            
+            <div class="form-group" style="margin-bottom:1.5rem;">
+                <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">URL Hình ảnh Banner</label>
+                <input type="text" id="edit-booth-image" placeholder="VD: images/banner.png" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit;">
+            </div>
+            
+            <button class="btn-primary full-btn" onclick="saveBoothConfig()" style="background:#ee4d2d; color:#fff; border:none; width:100%; padding:10px; border-radius:4px; font-weight:600; cursor:pointer; transition:background 0.2s;">Cập Nhật Gian Hàng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Thêm Voucher Mới -->
+<div class="modal" id="modal-add-voucher">
+    <div class="modal-box" style="max-width: 450px; background:#fff; padding:1.8rem; border-radius:8px;">
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem;">
+            <h4 style="font-size:1.1rem; font-weight:700; color:#1e293b;"><i class="fa-solid fa-ticket" style="color:#ee4d2d; margin-right:8px;"></i>Thêm Voucher Mới</h4>
+            <button class="modal-close" onclick="closeModal('modal-add-voucher')" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:#64748b;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group" style="margin-bottom:1rem;">
+                <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Mã Voucher</label>
+                <input type="text" id="v-code" placeholder="VD: SALE30K, HE2026" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit; text-transform: uppercase;">
+            </div>
+            
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom:1rem;">
+                <div class="form-group">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Loại giảm giá</label>
+                    <select id="v-type" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit; background:#fff;">
+                        <option value="PERCENT">Giảm theo %</option>
+                        <option value="FIXED">Số tiền cố định (đ)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Giá trị giảm</label>
+                    <input type="number" id="v-value" placeholder="VD: 10 hoặc 30000" min="1" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit;">
+                </div>
+            </div>
+            
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom:1rem;">
+                <div class="form-group">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Đơn tối thiểu (đ)</label>
+                    <input type="number" id="v-min-order" placeholder="VD: 150000" min="0" value="0" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit;">
+                </div>
+                <div class="form-group">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Lượt dùng tối đa</label>
+                    <input type="number" id="v-max-uses" placeholder="Không giới hạn" min="1" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit;">
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom:1.5rem;">
+                <label style="display:block; font-size:0.85rem; font-weight:600; color:#64748b; margin-bottom:5px;">Hạn sử dụng</label>
+                <input type="date" id="v-expiry" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #e2e8f0; border-radius:4px; font-family:inherit;">
+            </div>
+            
+            <button class="btn-primary full-btn" onclick="saveNewVoucher()" style="background:#ee4d2d; color:#fff; border:none; width:100%; padding:10px; border-radius:4px; font-weight:600; cursor:pointer; transition:background 0.2s;">Tạo Voucher</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-logo"><i class="fa-solid fa-bag-shopping"></i> XH<span>STORE</span></div>
+                <p>Thời trang, mỹ phẩm, phụ kiện công sở. Mua sắm nhanh, quản lý gọn.</p>
+            </div>
+            <div>
+                <h4>Khám phá</h4>
+                <a href="#flash-sale-section">Flash Sale</a>
+                <a href="#best-seller-section">Best Seller</a>
+                <a href="#voucher-section">Voucher</a>
+            </div>
+            <div>
+                <h4>Hỗ trợ</h4>
+                <a href="orders.html">Đơn hàng của tôi</a>
+                <a href="profile.html">Tài khoản</a>
+                <a href="custom-order.html">Đặt hàng mẫu</a>
+            </div>
+        </div>
+        <div class="footer-bottom">Hệ thống quản lý bán hàng & đợt sale công sở</div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>
